@@ -9,6 +9,7 @@ body{
 	fill: #faff6b;
 	stroke-width: 3px;
 	stroke: #f8fbde;
+	cursor:hand;
 }
 .dim {
 	fill: #babf2b;
@@ -17,22 +18,49 @@ body{
 .label {
 	font-size: 1em;
 	fill: #F60000;
+	cursor:hand;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 .container {
+	position:relative;
+	top:-10
 	width: 80%;
 	margin: auto;
 }
 .center {
 	width: 100%;
 	margin: auto;
+	margin-top:0;
 	text-align: center;
 }
 .banner {
-	font-size: 10em;
+	position:fixed;
+	bottom:0;
+	padding-bottom:10px;
+	background-color: rgba(40,40,40,0.3);
+	font-size: 8em;
+}
+.reset {
+	display:block;
+	margin: auto;
+	margin-right:10%;
+}
+.reset-box {
+	position:relative;
+	top: 50;
+	cursor:hand;
 }
 </style>
 <body>
 	<div class="container">
+		<div class="reset-box" onclick="reset()">
+			<svg class="reset" viewBox="0 0 1000 1000" height="10%" fill="#e7e7e7">
+			<g><path d="M807.3,561.2c-28.9,143.3-156.1,247.4-302.4,247.4c-170.2,0-308.7-138.5-308.7-308.7c0-170.2,138.4-308.6,308.7-308.6c81.1,0,157.8,32.7,215.2,88.6l-95.3,96.3h313.9V61l-86.6,86.2C759.8,56.5,636,5.1,505.1,5.1C232.1,5.1,10,227.1,10,499.9c0,272.9,222,494.9,494.9,494.9C739.6,994.9,943.7,828,990,598L807.3,561.2z"/></g>
+			</svg>
+		</div>
 		<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 25.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Laag_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -270,34 +298,55 @@ body{
 			<rect x="413.35" y="280.48" class="st2" width="68.47" height="25.01"/>
 
 			<circle id="oracleOne" class="oracle" cx="320" cy="150" r="15"  />
-			<text x="315" y="156" class="label">1</text>
+			<text x="315" y="156" class="label" id="labelOne">1</text>
 			<circle id="oracleTwo" class="oracle" cx="200" cy="340" r="15"  />
-			<text x="195" y="346" class="label">2</text>
+			<text x="195" y="346" class="label" id="labelTwo">2</text>
 			<circle id="oracleThree" class="oracle" cx="235" cy="460" r="15"  />
-			<text x="230" y="466" class="label">3</text>
+			<text x="230" y="466" class="label" id="labelThree">3</text>
 			<circle id="oracleFour" class="oracle" cx="440" cy="435" r="15"  />
-			<text x="435" y="441" class="label">4</text>
+			<text x="435" y="441" class="label" id="labelFour">4</text>
 			<circle id="oracleFive" class="oracle" cx="670" cy="380" r="15"  />
-			<text x="665" y="386" class="label">5</text>
+			<text x="665" y="386" class="label" id="labelFive">5</text>
 			<circle id="oracleSix" class="oracle" cx="705" cy="270" r="15"  />
-			<text x="700" y="276" class="label">6</text>
+			<text x="700" y="276" class="label" id="labelSix">6</text>
 			<circle id="oracleSeven" class="oracle" cx="590" cy="170" r="15"  />
-			<text x="585" y="176" class="label">7</text>
+			<text x="585" y="176" class="label" id="labelSeven">7</text>
 		</svg>
 	</div>
 	<div class="banner center" id="out"></div>
 </body>
 <script type="text/javascript">
-window.numbers = ["1","2","3","4","5","6","7"];
-
-function toggleOracle () {
-	elem = document.getElementById(this.id);
+function reset() {
+	Array.from(document.getElementsByClassName("oracle")).forEach(function(elem) {
+		if(elem.classList.contains("dim")){
+			elem.classList.remove("dim");
+		}
+	});
+	document.getElementById("out").innerHTML = "";
+	window.numbers = ["1","2","3","4","5","6","7"];
+}
+function clickOracle() {
+	toggleOracle(this.id);
+}
+function clickLabel() {
+	toggleOracle(this.id.replace("label", "oracle"));
+}
+function toggleOracle (id) {
+	elem = document.getElementById(id);
 	if(elem.classList.contains("dim")){
 		elem.classList.remove("dim");
 	} else { 
 		elem.classList.add("dim");
 	}
 }
+Array.from(document.getElementsByClassName("oracle")).forEach(function(element) {
+	element.addEventListener("click", clickOracle)
+});
+Array.from(document.getElementsByClassName("label")).forEach(function(element) {
+	element.addEventListener("click", clickLabel)
+});
+
+window.numbers = ["1","2","3","4","5","6","7"];
 document.addEventListener("keydown", function(e) {
 	div = document.getElementById("out");
 	if(e.key == "r"){
@@ -307,9 +356,6 @@ document.addEventListener("keydown", function(e) {
 		window.numbers = window.numbers.filter(function(num){return num != e.key})
 		div.innerHTML += e.key;
 	}
-});
-Array.from(document.getElementsByClassName("oracle")).forEach(function(element) {
-	element.addEventListener("click", toggleOracle)
 });
 </script>
 </html>
